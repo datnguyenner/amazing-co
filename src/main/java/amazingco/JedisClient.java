@@ -19,7 +19,6 @@ public class JedisClient {
 	public JedisClient(String host, int port, String password) {
 		this.jedis = new Jedis(host, port);
 		System.out.println("Connected to Redis");
-
 	}
 
 	public void addNode(Node node) {

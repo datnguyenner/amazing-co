@@ -44,6 +44,27 @@ public class NodeUtil {
 
 	}
 
+	public boolean isValidNewParent(String child, String newParent, JedisClient jedis) {
+
+		Deque<Node> nodes = new ArrayDeque<>();
+		nodes.push(jedis.getNode(child));
+
+		if (!child.equalsIgnoreCase(newParent)) {
+			while (!nodes.isEmpty()) {
+				Node topNode = nodes.pop();
+				for (String childName : topNode.getChildren()) {
+					if (childName.equalsIgnoreCase(newParent)) {
+						return false;
+					}
+					Node dataNode = jedis.getNode(childName);
+					nodes.push(dataNode);
+				}
+			}
+		}
+
+		return true;
+	}
+
 	private void updateDescendantsHeight(Node node, JedisClient jedis) {
 
 		Deque<Node> nodes = new ArrayDeque<>();
