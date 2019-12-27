@@ -1,6 +1,9 @@
 package amazingco;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -62,25 +65,47 @@ public class NodeUtilTest {
 	public void testGetDecendants() {
 
 		List<Node> descendants = util.getDescendants(jedis.getNode("A"), jedis);
-		System.out.println("Node A descendants");
-		descendants.forEach(descendant -> System.out.println(descendant));
 
-		System.out.println("Node C descendants");
+		String arr[] = { "C", "B", "E", "D", "F", "G", "H", "J", "K", "I" };
+		Set<String> descendantsA = new HashSet<>(Arrays.asList(arr));
+		descendants.forEach(descendant -> {
+			assertEquals(true, descendantsA.contains(descendant.getName()));
+			descendantsA.remove(descendant.getName());
+		});
+		assertEquals(true, descendantsA.size() == 0);
+
+		String arr2[] = { "G", "H", "J", "K", "I" };
+		Set<String> descendantsC = new HashSet<>(Arrays.asList(arr2));
 		descendants = util.getDescendants(jedis.getNode("C"), jedis);
-		descendants.forEach(descendant -> System.out.println(descendant));
+		descendants.forEach(descendant -> {
+			assertEquals(true, descendantsC.contains(descendant.getName()));
+			descendantsC.remove(descendant.getName());
+		});
+		assertEquals(true, descendantsA.size() == 0);
 
-		System.out.println("Node H descendants");
+
+		String arr3[] = { "J", "K", "I" };
+		Set<String> descendantsH = new HashSet<>(Arrays.asList(arr3));
 		descendants = util.getDescendants(jedis.getNode("H"), jedis);
-		descendants.forEach(descendant -> System.out.println(descendant));
+		descendants.forEach(descendant -> {
+			assertEquals(true, descendantsH.contains(descendant.getName()));
+			descendantsH.remove(descendant.getName());
+		});
+		assertEquals(true, descendantsA.size() == 0);
+
 
 	}
 
 	@Test
 	public void testChangeParent() {
-		util.changeParent("B", "G", jedis);
 		List<Node> descendants = util.getDescendants(jedis.getNode("A"), jedis);
-		System.out.println("Node A descendants After changing parent");
-		descendants.forEach(descendant -> System.out.println(descendant));
+		assertEquals(false, descendants.get(descendants.size() - 1).getHeight() == 5);
+		
+		util.changeParent("B", "K", jedis);
+		descendants = util.getDescendants(jedis.getNode("A"), jedis);
+		assertEquals(true, descendants.get(descendants.size() - 1).getHeight() == 5);
+		assertEquals(true, descendants.get(0).getHeight() == 1);
+
 	}
 
 	@Test
@@ -91,7 +116,6 @@ public class NodeUtilTest {
 		assertEquals(false, util.isValidNewParent("B", "F", jedis));
 		assertEquals(true, util.isValidNewParent("B", "C", jedis));
 		assertEquals(true, util.isValidNewParent("B", "K", jedis));
-
 
 	}
 
