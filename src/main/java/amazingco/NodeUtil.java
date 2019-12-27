@@ -31,37 +31,4 @@ public class NodeUtil {
 		return descendants;
 	}
 
-	/*
-	public void changeParent(Node root, String name, String newParent) {
-		
-		Node editNode = search(root, name);
-		
-		System.out.println("test" + editNode);
-		
-		Node currentParent = editNode.getParent();
-		currentParent.getChildren().removeIf(node-> node.getName().equalsIgnoreCase(name));
-		
-		Node newParentNode = search(root, newParent);
-		editNode.setParent(newParentNode);
-		editNode.setHeight(newParentNode.getHeight()+1);
-		newParentNode.addChild(editNode);
-
-	}
-	
-	private Node search(Node root,  String name) { 
-	    
-		if (root==null || root.getName().equalsIgnoreCase(name)) 
-	        return root; 
-	  
-		for(Node node : root.getChildren()) {
-			
-			Node editNode = search(node, name);
-			
-			if( editNode != null) return editNode;
-		}
-		
-		return null;
-	} 
-	*/
-
 }
