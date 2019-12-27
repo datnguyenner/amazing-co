@@ -49,16 +49,18 @@ public class NodeUtil {
 		Deque<Node> nodes = new ArrayDeque<>();
 		nodes.push(jedis.getNode(child));
 
-		if (!child.equalsIgnoreCase(newParent)) {
-			while (!nodes.isEmpty()) {
-				Node topNode = nodes.pop();
-				for (String childName : topNode.getChildren()) {
-					if (childName.equalsIgnoreCase(newParent)) {
-						return false;
-					}
-					Node dataNode = jedis.getNode(childName);
-					nodes.push(dataNode);
+		if (child.equalsIgnoreCase(newParent)) {
+			return false;
+		}
+
+		while (!nodes.isEmpty()) {
+			Node topNode = nodes.pop();
+			for (String childName : topNode.getChildren()) {
+				if (childName.equalsIgnoreCase(newParent)) {
+					return false;
 				}
+				Node dataNode = jedis.getNode(childName);
+				nodes.push(dataNode);
 			}
 		}
 

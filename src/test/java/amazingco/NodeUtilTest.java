@@ -86,10 +86,12 @@ public class NodeUtilTest {
 	@Test
 	public void testInvalidParent() {
 
-		assertEquals(false, util.isValidNewParent("B", "D", jedis));
+		assertEquals(false, util.isValidNewParent("B", "B", jedis));
 		assertEquals(false, util.isValidNewParent("B", "E", jedis));
 		assertEquals(false, util.isValidNewParent("B", "F", jedis));
 		assertEquals(true, util.isValidNewParent("B", "C", jedis));
+		assertEquals(true, util.isValidNewParent("B", "K", jedis));
+
 
 	}
 
