@@ -1,5 +1,6 @@
 amazingco/Controller.class
 amazingco/Node.class
+amazingco/Controller$NodeNotFoundException.class
 amazingco/NodeUtil.class
 amazingco/JedisClient.class
 amazingco/Application.class
