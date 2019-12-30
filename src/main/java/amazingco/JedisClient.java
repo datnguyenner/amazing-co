@@ -17,8 +17,19 @@ public class JedisClient {
 	private final Jedis jedis;
 
 	public JedisClient(String host, int port, String password) {
-		this.jedis = new Jedis(host, port);
-		System.out.println("Connected to Redis");
+
+		try {
+
+			this.jedis = new Jedis(host, port);
+			if(getRoot("root") == null) {
+				Node root = new Node("root", "root", null, 0); // A root node is added if it does not exist in redis
+				addNode(root);
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+
 	}
 
 	public void addNode(Node node) {
@@ -43,70 +54,90 @@ public class JedisClient {
 
 	public Node getNode(String name) {
 
-		Node node = new Node(name, this.jedis.get(name + ":root"), this.jedis.get(name + ":parent"),
-				Integer.valueOf(this.jedis.get(name + ":height")));
+		if (this.jedis.get(name + ":root") != null) {
+			Node node = new Node(name, this.jedis.get(name + ":root"), this.jedis.get(name + ":parent"),
+					Integer.valueOf(this.jedis.get(name + ":height")));
 
-		Set<String> childrens = this.jedis.smembers(name + ":children");
-		childrens.forEach(child -> node.addChild(child));
+			Set<String> childrens = this.jedis.smembers(name + ":children");
+			childrens.forEach(child -> node.addChild(child));
 
-		return node;
-		
+			return node;
+		}
+
+		return null;
 	}
-	
+
 	public void removeChild(String parent, String child) {
 
 		StringBuilder sb = new StringBuilder();
 		final String key = sb.append(parent).append(":children").toString();
 
 		this.jedis.srem(key, child);
-		
+
 	}
-	
+
 	public String getParent(String node) {
 
 		StringBuilder sb = new StringBuilder();
 		String key = sb.append(node).append(":parent").toString();
 
 		return jedis.get(key);
-		
+
 	}
-	
+
 	public void setParent(String child, String parent) {
 
 		StringBuilder sb = new StringBuilder();
 		String key = sb.append(child).append(":parent").toString();
 
 		this.jedis.set(key, parent);
-		
+
 	}
-	
+
 	public void setHeight(String child, int height) {
 
 		StringBuilder sb = new StringBuilder();
 		String key = sb.append(child).append(":height").toString();
 
 		this.jedis.set(key, String.valueOf(height));
-		
+
 	}
-	
+
 	public String getHeight(String node) {
 
 		StringBuilder sb = new StringBuilder();
 		String key = sb.append(node).append(":height").toString();
 
 		return this.jedis.get(key);
-		
+
 	}
-	
+
 	public void addChild(String parent, String child) {
 
 		StringBuilder sb = new StringBuilder();
 		String key = sb.append(parent).append(":children").toString();
 
 		this.jedis.sadd(key, child);
-		
+
 	}
 	
+	public void setRoot(String node, String root) {
+
+		StringBuilder sb = new StringBuilder();
+		String key = sb.append(node).append(":root").toString();
+
+		this.jedis.set(key, root);
+
+	}
+	
+	public String getRoot(String node) {
+
+		StringBuilder sb = new StringBuilder();
+		String key = sb.append(node).append(":root").toString();
+
+		return this.jedis.get(key);
+	}
+
 	public void deleteAllKeys() {
 		this.jedis.flushAll();
 	}
