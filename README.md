@@ -28,12 +28,11 @@ Each node should have the following info:
 
 
 Solution:
-
 amazing-co was implemented using Spring boot for HTTP APIS, Redis for persisting data, and docker to put it all together.
 
-clone repo
-cd amazing-co/
-docker-compose up -d
+-clone repo
+-cd amazing-co/
+-docker-compose up -d
 
 Get all descendant nodes of a given node: 
 - http://localhost:8080/nodes/{node}/descendants where {node} is the name of the node.
@@ -48,4 +47,17 @@ Change the parent node of a given node:
 - If a child node does not exist then a new node will be created and added to the existing parent
 - The new parent must exist in DB or you will get a 304 Not Modified.
 
-All data are stored using key/value pair
+Additional Info:
+- All data are stored using key/value pair
+- Unit test are added but will only work if redis server is running. For improvement I can mock redis in the test
+- jars are added to this repo so no need to build
+- I also provided a sample tree to quickly test persisted nodes http://localhost:8080/useTestData
+
+          A
+        /    \
+       B      C
+    /  | \    | \
+   D   E  F   G  H
+                 /|\
+                I J K
+
