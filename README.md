@@ -52,12 +52,4 @@ Additional Info:
 - Unit test are added but will only work if redis server is running. For improvement I can mock redis in the test
 - jars are added to this repo so no need to build
 - I also provided a sample tree to quickly test persisted nodes http://localhost:8080/useTestData
-
-          A
-        /    \
-       B      C
-    /  | \    | \
-   D   E  F   G  H
-                 /|\
-                I J K
-
+ 
