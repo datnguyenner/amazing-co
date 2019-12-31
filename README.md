@@ -30,9 +30,9 @@ Each node should have the following info:
 ## Solution:
 amazing-co was implemented using Spring boot for HTTP APIS, Redis for persisting data, and docker to put it all together.
 
--clone repo
--cd amazing-co/
--docker-compose up -d
+- clone repo
+- cd amazing-co/
+- docker-compose up -d
 
 **Get all descendant nodes of a given node:**
 - http://localhost:8080/nodes/{node}/descendants where {node} is the name of the node.
